@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
+import { Login } from "./Login";
 
 function VerticalBar({ value, user }) {
   const isPositive = value >= 0;
@@ -87,6 +88,7 @@ export const Home = () => {
           <VerticalBar key={index} value={value} user={users[index]} />
         ))}
       </div> */}
+      <Login />
 
       {Object.entries(data).map(([group_name, balance], index) => (
         <Row
