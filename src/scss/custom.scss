@@ -1,7 +1,3 @@
 @import "colors";
 
 @import "bootstrap/scss/bootstrap.scss";
-
-body {
-  background-color: map-get($map: $theme-colors, $key: "light");
-}

@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Carousel, Row, Col, Image } from "react-bootstrap";
-import TelegramLoginButton from "react-telegram-login";
+
+import { Header } from "./Header";
 
 export const Login = () => {
   const images_src = ["/avion.svg", "/home.svg", "/friends.svg"];
@@ -8,7 +9,11 @@ export const Login = () => {
   const colors = ["primary", "secondary", "info"];
   return (
     <>
-      <Container fluid className="px-0 pt-4">
+      <Header className="fixed-top" showTelegramButton={true} />
+      <Container
+        fluid
+        className="p-0 pt-5 d-flex align-items-center vh-100 bg-light"
+      >
         <Carousel
           controls={false}
           indicators={false}
@@ -57,13 +62,8 @@ const CarouselImage = ({ src, text, color }) => {
           Log in with Telegram and use our telegram bot or our webapp to
           organize your expenses
         </h5>
-        <TelegramLoginButton
-          className="mt-3"
-          dataAuthUrl="https://opensplit.netlify.app/home"
-          botName="opensplit_bot"
-        />
       </Col>
-      <Col xl={5} className="bg-light">
+      <Col xl={5} className="bg-light px-lg-5">
         <Image fluid src={src} />
       </Col>
     </Row>
