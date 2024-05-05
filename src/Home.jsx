@@ -3,10 +3,11 @@ import { Container, Row, Col, Spinner } from "react-bootstrap";
 
 import { Profile } from "./Profile";
 
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 export const Home = () => {
   const [data, setData] = useState([]);
+  const [authInfo, setAuthInfo] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,30 +16,57 @@ export const Home = () => {
   const [lastName, setLastName] = useState(searchParams.get("last_name"));
   const [username, setUsername] = useState(searchParams.get("username"));
   const [photoUrl, setPhotoUrl] = useState(searchParams.get("photo_url"));
-  const [authDate, setAuthDate] = useState(searchParams.get("auth_date"));
-  const [hash, setHash] = useState(searchParams.get("hash"));
+  const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    let auth = {};
+
+    for (let [key, value] of searchParams) {
+      auth[key] = value;
+    }
+
+    setAuthInfo(auth);
+    localStorage.setItem("auth", auth);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchGroups = async () => {
       try {
         setLoading(true);
-        console.log(username);
+
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: JSON.stringify(authInfo),
+          },
+        };
+
         const response = await fetch(
-          `https://opensplitbackend.onrender.com/users/@${username}/balance`
+          `https://opensplitbackend.onrender.com/users/@${username}/balance`,
+          requestOptions
         );
         const jsonData = await response.json();
-        console.log(jsonData);
-        setLoading(false);
         setData(jsonData);
+        console.log(jsonData);
+
+        setLoading(false);
       } catch (error) {
         setError(error);
-        console.error(error);
         setLoading(false);
+
+        console.error(error);
       }
     };
 
-    fetchGroups();
-  }, [id, firstName, lastName, username, photoUrl, authDate, hash]);
+    if (Object.keys(authInfo).length !== 0) {
+      fetchGroups();
+    }
+  }, [username, authInfo]);
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
 
   return (
     <>
@@ -60,22 +88,24 @@ export const Home = () => {
         <Container fluid className="p-0">
           <Row xs={1} lg={2} className="mx-0 p-0">
             <Col className="p-0">
-              {Object.entries(data).map(([group_name, balance], index) => (
-                <Row
-                  key={index}
-                  className="mx-0 py-4 px-3 bg-dark justify-content-between border border-bottom-1 text-white"
-                >
-                  <Col xs="auto">
-                    <h3>{group_name}</h3>
-                  </Col>
-                  <Col
-                    xs="auto"
-                    className={balance < 0 ? "text-danger" : "text-success"}
-                  >
-                    <h5>{balance}</h5>
-                  </Col>
-                </Row>
-              ))}
+              <Row className="m-3 rounded-3 border border-bottom-1 ">
+                <input
+                  type="text"
+                  value={filter}
+                  onChange={handleFilterChange}
+                  className="h-100 py-3 fs-4 rounded-2"
+                  placeholder="Filtra a través de todos tus grupos"
+                />
+              </Row>
+              {data.map((group, index) =>
+                filter == "" || group.group_name.startsWith(filter) ? (
+                  <GroupButton
+                    group_name={group.group_name}
+                    balance={group.amount}
+                    key={index}
+                  />
+                ) : null
+              )}
             </Col>
             <Col className="d-none d-lg-block">
               <Profile
@@ -93,3 +123,16 @@ export const Home = () => {
     </>
   );
 };
+
+function GroupButton({ group_name, balance }) {
+  return (
+    <Row className="m-3 py-4 px-3 bg-dark justify-content-between rounded-4 border border-bottom-1 text-white">
+      <Col xs="auto">
+        <h3>{group_name}</h3>
+      </Col>
+      <Col xs="auto" className={balance < 0 ? "text-danger" : "text-success"}>
+        <h3 className="mb-0">{Math.round(balance * 100) / 100} €</h3>
+      </Col>
+    </Row>
+  );
+}

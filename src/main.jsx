@@ -6,7 +6,7 @@ import { Root } from "./Root";
 import { NotFound } from "./NotFound";
 import { Login } from "./Login";
 import { Home } from "./Home";
-import { Group } from "./Group";
+import { Group, loaderGroup } from "./Group";
 
 // Importing the Bootstrap CSS (customized)
 import "./scss/custom.scss";
@@ -24,7 +24,7 @@ const router = createBrowserRouter(
           element: <Login />,
         },
         { path: "/home", element: <Home /> },
-        { path: "/home/:group_name", element: <Group /> },
+        { path: "/home/:group", element: <Group />, loader: loaderGroup },
       ],
     },
   ],

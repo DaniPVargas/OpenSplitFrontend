@@ -5,15 +5,13 @@ import { Container, Row, Col, Image } from "react-bootstrap";
 function getBalance(data) {
   let positive_balance = 0;
   let negative_balance = 0;
-  for (let key in data) {
-    if (data.hasOwnProperty(key)) {
-      if (data[key] > 0) {
-        positive_balance += data[key];
-      } else {
-        negative_balance -= data[key];
-      }
+  data.forEach((element) => {
+    if (element.amount > 0) {
+      positive_balance += element.amount;
+    } else {
+      negative_balance -= element.amount;
     }
-  }
+  });
   return [
     positive_balance,
     negative_balance,

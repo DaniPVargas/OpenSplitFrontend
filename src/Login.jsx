@@ -5,7 +5,7 @@ import { Header } from "./Header";
 
 export const Login = () => {
   const images_src = ["/avion.svg", "/home.svg", "/friends.svg"];
-  const texts = ["of your trips", "of your home", "with your friends"];
+  const texts = ["on your trips", "on your home", "with your friends"];
   const colors = ["primary", "secondary", "info"];
   return (
     <>
@@ -57,11 +57,9 @@ const CarouselImage = ({ src, text, color }) => {
         xxl={4}
         className="bg-light d-flex flex-column justify-content-center px-md-4"
       >
-        <h1>
-          Organize your expenses{" "}
-          <span className={`fw-bolder text-${color}`}>{text}</span> without
-          stress
-        </h1>
+        <h1 className="mb-0">Organize the expenses </h1>
+        <h1 className={`fw-bolder mb-0 text-${color}`}>{text}</h1>
+        <h1>without stress</h1>
         <Row className="my-2">
           {images_src.map((src, index) => (
             <Col key={index} xs="auto">
