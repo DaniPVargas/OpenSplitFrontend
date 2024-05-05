@@ -27,7 +27,7 @@ export const Header = ({ className, showTelegramButton }) => {
             <div className="d-flex justify-content-end p-0">
               <TelegramLoginButton
                 className="mt-3"
-                dataAuthUrl="https://opensplit.netlify.app/home"
+                dataAuthUrl="https://opensplit.co/home"
                 botName="opensplit_bot"
               />
             </div>
