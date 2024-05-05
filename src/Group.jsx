@@ -31,7 +31,6 @@ export const Group = () => {
         balance[payer] -= amount;
       }
 
-      // Registrar la cantidad recibida (positiva) por el receptor
       if (!(receiver in balance)) {
         balance[receiver] = amount;
       } else {
@@ -103,7 +102,7 @@ export const Group = () => {
           <Expenses expenses={expenses} />
         </Tab>
         <Tab eventKey="exchanges" title="Exchanges">
-          <Exchanges exchanges={exchanges} balance={balances} />
+          <Exchanges exchanges={exchanges} />
         </Tab>
         <Tab eventKey="graphics" title="Graphics">
           <Graphics />
@@ -137,7 +136,7 @@ const Expenses = ({ expenses }) => {
   );
 };
 
-const Exchanges = ({ exchanges, balance }) => {
+const Exchanges = ({ exchanges }) => {
   return (
     <>
       <Container fluid className="p-0 border-bottom">
@@ -157,24 +156,6 @@ const Exchanges = ({ exchanges, balance }) => {
           </Row>
         ))}
       </Container>
-      {/* <Container fluid className="p-0">
-        {console.log(balance)}
-        {Object.entries(balance).map(([name, value], index) => (
-          <Row
-            key={index}
-            className="bg-body-tertiary border-top border-bottom-1 px-5 py-3"
-          >
-            <Col className="d-flex flex-column align-items-start justify-content-center">
-              
-            </Col>
-            <Col className="d-flex flex-column align-items-end justify-content-center"></Col>
-          </Row>
-        ))}
-      </Container> */}
     </>
   );
-};
-
-const Graphics = () => {
-  return <div>Graphics</div>;
 };
