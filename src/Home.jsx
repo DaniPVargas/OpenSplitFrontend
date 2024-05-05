@@ -97,7 +97,7 @@ export const Home = () => {
                   value={filter}
                   onChange={handleFilterChange}
                   className="h-100 py-3 fs-4 rounded-2"
-                  placeholder="Filtra a través de todos tus grupos"
+                  placeholder="Filter groups..."
                 />
               </Row>
               {data.map((group, index) =>

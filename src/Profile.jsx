@@ -41,7 +41,7 @@ export const Profile = ({
       </Row>
       <h2 className="text-center mt-4">My total balance</h2>
       <p className="text-center">
-        How much I debt and I receive for my groups?
+        How much I owe and I should receive from my groups?
       </p>
       <Row xs={2} className="py-0">
         <Col
