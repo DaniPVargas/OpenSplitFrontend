@@ -18,7 +18,7 @@ export const Root = () => {
   return (
     <>
       {showHeader && (
-        <Header className="sticky-top" showTelegramButton={false} />
+        <Header className="sticky-top py-4" showTelegramButton={false} />
       )}
       <main>
         <Outlet />

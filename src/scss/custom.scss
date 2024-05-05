@@ -1,3 +1,61 @@
 @import "colors";
 
 @import "bootstrap/scss/bootstrap.scss";
+
+.navbar {
+  transition: padding 0.5s;
+}
+
+//////////////////////////////////
+// Add more clases to bootstrap //
+//////////////////////////////////
+
+// Add more clases to heigh relative to viewport
+
+$min-sizes-vh: (
+  25: 25vh,
+  50: 50vh,
+  75: 75vh,
+  100: 100vh,
+);
+
+@each $size, $length in $min-sizes-vh {
+  .min-vh-#{$size} {
+    min-height: $length !important;
+  }
+}
+
+$sizes-vh: (
+  25: 25vh,
+  50: 50vh,
+  75: 75vh,
+);
+
+@each $size, $length in $sizes-vh {
+  .vh-#{$size} {
+    min-height: $length !important;
+  }
+}
+
+// Add more clases to max-width
+
+$sizes: (
+  25: 25%,
+  50: 50%,
+  75: 75%,
+  90: 90%,
+);
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  @each $size, $length in $sizes {
+    @include media-breakpoint-up($breakpoint) {
+      .mw-#{$breakpoint}-#{$size} {
+        max-width: $length !important;
+      }
+    }
+
+    .mw-#{$size} {
+      max-width: $length !important;
+    }
+  }
+}

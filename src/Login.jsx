@@ -9,10 +9,10 @@ export const Login = () => {
   const colors = ["primary", "secondary", "info"];
   return (
     <>
-      <Header className="fixed-top" showTelegramButton={true} />
+      <Header className="fixed-top py-2 py-lg-4" showTelegramButton={true} />
       <Container
         fluid
-        className="p-0 pt-5 d-flex align-items-center vh-100 bg-light"
+        className="p-0 pt-5 d-flex align-items-center min-vh-100 bg-light"
       >
         <Carousel
           controls={false}
@@ -41,9 +41,20 @@ const CarouselImage = ({ src, text, color }) => {
   const images_src = ["/avion.svg", "/home.svg", "/friends.svg"];
 
   return (
-    <Row lg={2} className="justify-content-center">
+    <Row lg={2} className="justify-content-center px-3 px-lg-0">
+      <Col
+        xs={10}
+        sm={8}
+        md={6}
+        xl={5}
+        xxl={4}
+        className="bg-light px-lg-5 order-lg-2"
+      >
+        <Image fluid src={src} />
+      </Col>
       <Col
         xl={5}
+        xxl={4}
         className="bg-light d-flex flex-column justify-content-center px-md-4"
       >
         <h1>
@@ -62,9 +73,6 @@ const CarouselImage = ({ src, text, color }) => {
           Log in with Telegram and use our telegram bot or our webapp to
           organize your expenses
         </h5>
-      </Col>
-      <Col xl={5} className="bg-light px-lg-5">
-        <Image fluid src={src} />
       </Col>
     </Row>
   );

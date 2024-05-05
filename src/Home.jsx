@@ -1,109 +1,95 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 
-function VerticalBar({ value, user }) {
-  const isPositive = value >= 0;
-  const barHeight = `${Math.abs(value)}%`; // calculate height based on value
-  const barColor = isPositive ? "bg-success" : "bg-danger"; // green for positive, red for negative
+import { Profile } from "./Profile";
 
-  const containerStyle = {
-    height: "300px", // fixed height for the container
-    width: "50px", // fixed width to keep things uniform
-    marginRight: "40px", // space between bars
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center", // this centers the baseline
-    alignItems: "center",
-  };
-
-  const barStyle = {
-    height: barHeight,
-    width: "100%",
-    position: "absolute",
-    bottom: isPositive ? "60%" : "auto", // start from middle and extend upwards if positive
-    top: isPositive ? "auto" : "55%", // start from middle and extend downwards if negative
-    transition: "height 0.3s ease",
-  };
-
-  return (
-    <div style={containerStyle}>
-      <div style={barStyle} className={barColor}></div>
-      <p className="text-center mt-1">{user}</p>
-    </div>
-  );
-}
+import { useSearchParams } from "react-router-dom";
 
 export const Home = () => {
-  const values = [20, 50, -30, 80, -10];
-  const users = ["Jorge", "Dani", "Sergio", "Antón", "CastilloDel"];
-  const [nick, setNick] = useState("antongomez_10");
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [id, setId] = useState(searchParams.get("id"));
+  const [firstName, setFirstName] = useState(searchParams.get("first_name"));
+  const [lastName, setLastName] = useState(searchParams.get("last_name"));
+  const [username, setUsername] = useState(searchParams.get("username"));
+  const [photoUrl, setPhotoUrl] = useState(searchParams.get("photo_url"));
+  const [authDate, setAuthDate] = useState(searchParams.get("auth_date"));
+  const [hash, setHash] = useState(searchParams.get("hash"));
 
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        // const response = await fetch(
-        //   `https://opensplitbackend.onrender.com/users/${nick}/balance`,
-        //   { mode: "no-cors" }
-        // );
-        // const jsonData = await response.json();
-        const mockData = {
-          grupo1: -1.5,
-          grupo2: 0.5,
-          grupo3: 1.0,
-          grupo4: -1.0,
-          grupo5: 1.0,
-          grupo6: -0.5,
-          grupo7: 0.8,
-          grupo8: -0.2,
-          grupo9: 0.3,
-          grupo10: -0.7,
-          grupo11: 0.9,
-          grupo12: -0.4,
-          grupo13: 0.6,
-          grupo14: -0.1,
-          grupo15: 0.2,
-          grupo16: -0.3,
-          grupo17: 0.4,
-          grupo18: -0.6,
-          grupo19: 0.7,
-          grupo20: -0.8,
-        };
-        console.log(mockData);
-        setData(mockData);
+        setLoading(true);
+        console.log(username);
+        const response = await fetch(
+          `https://opensplitbackend.onrender.com/users/@${username}/balance`
+        );
+        const jsonData = await response.json();
+        console.log(jsonData);
+        setLoading(false);
+        setData(jsonData);
       } catch (error) {
-        console.error(`Error fetching groups data of user: ${nick}. `, error);
+        setError(error);
+        console.error(error);
+        setLoading(false);
       }
     };
 
     fetchGroups();
-  }, []);
+  }, [id, firstName, lastName, username, photoUrl, authDate, hash]);
 
   return (
-    <Container fluid className="p-0">
-      {/* <div className="d-flex justify-content-center">
-        {values.map((value, index) => (
-          <VerticalBar key={index} value={value} user={users[index]} />
-        ))}
-      </div> */}
-
-      {Object.entries(data).map(([group_name, balance], index) => (
-        <Row
-          key={index}
-          className="mx-0 py-4 px-3 bg-dark justify-content-between border border-bottom-1"
+    <>
+      {loading && (
+        <Container
+          fluid
+          className="vh-75 d-flex align-items-center justify-content-center"
         >
-          <Col xs="auto">
-            <h1>{group_name}</h1>
-          </Col>
-          <Col
-            xs="auto"
-            className={balance < 0 ? "text-danger" : "text-success"}
+          <Spinner
+            animation="border"
+            role="status"
+            style={{ width: "100px", height: "100px" }}
           >
-            <h3>{balance}</h3>
-          </Col>
-        </Row>
-      ))}
-    </Container>
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </Container>
+      )}
+      {!loading && (
+        <Container fluid className="p-0">
+          <Row xs={1} lg={2} className="mx-0 p-0">
+            <Col className="p-0">
+              {Object.entries(data).map(([group_name, balance], index) => (
+                <Row
+                  key={index}
+                  className="mx-0 py-4 px-3 bg-dark justify-content-between border border-bottom-1 text-white"
+                >
+                  <Col xs="auto">
+                    <h3>{group_name}</h3>
+                  </Col>
+                  <Col
+                    xs="auto"
+                    className={balance < 0 ? "text-danger" : "text-success"}
+                  >
+                    <h5>{balance}</h5>
+                  </Col>
+                </Row>
+              ))}
+            </Col>
+            <Col className="d-none d-lg-block">
+              <Profile
+                className="px-2"
+                photo_url={photoUrl}
+                username={username}
+                first_name={firstName}
+                last_name={lastName}
+                data={data}
+              />
+            </Col>
+          </Row>
+        </Container>
+      )}
+    </>
   );
 };

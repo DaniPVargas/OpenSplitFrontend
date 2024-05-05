@@ -1,15 +1,19 @@
-import React from "react";
-import { Navbar, Container } from "react-bootstrap";
+import React, { useState } from "react";
+import { Navbar, Container, Image } from "react-bootstrap";
+
+import { useSearchParams } from "react-router-dom";
 
 import TelegramLoginButton from "react-telegram-login";
 
 export const Header = ({ className, showTelegramButton }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [photoUrl, setPhotoUrl] = useState(searchParams.get("photo_url"));
   return (
     <>
       <Navbar
         expand="md"
         variant="dark"
-        className={`bg-dark py-4 px-3 border border-bottom-1 ${className}`}
+        className={`${className} bg-dark px-3 border border-bottom-1`}
       >
         <Container fluid className="d-flex justify-content-between">
           <Navbar.Brand
@@ -25,6 +29,16 @@ export const Header = ({ className, showTelegramButton }) => {
                 className="mt-3"
                 dataAuthUrl="https://opensplit.netlify.app/home"
                 botName="opensplit_bot"
+              />
+            </div>
+          )}
+          {photoUrl && (
+            <div className="p-0">
+              <Image
+                fluid
+                src={photoUrl}
+                className="rounded-circle"
+                style={{ maxWidth: "65px" }}
               />
             </div>
           )}
