@@ -104,9 +104,6 @@ export const Group = () => {
         <Tab eventKey="exchanges" title="Exchanges">
           <Exchanges exchanges={exchanges} />
         </Tab>
-        <Tab eventKey="graphics" title="Graphics">
-          <Graphics />
-        </Tab>
       </Tabs>
     </>
   );
