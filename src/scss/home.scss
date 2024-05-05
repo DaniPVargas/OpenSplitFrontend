@@ -1,0 +1,15 @@
+@import "colors.scss";
+
+.link {
+  text-decoration: none;
+  color: map-get($map: $theme-colors, $key: "dark");
+}
+
+.link .row {
+  transition: transform 0.3s;
+}
+
+.link .row:hover,
+.link .row:focus {
+  transform: scale(1.02);
+}

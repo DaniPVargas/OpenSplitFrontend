@@ -57,10 +57,16 @@ const CarouselImage = ({ src, text, color }) => {
         xxl={4}
         className="bg-light d-flex flex-column justify-content-center px-md-4"
       >
-        <h1 className="mb-0">Organize the expenses </h1>
-        <h1 className={`fw-bolder mb-0 text-${color}`}>{text}</h1>
-        <h1>without stress</h1>
-        <Row className="my-2">
+        <h1 className="mb-0 text-center text-lg-start">
+          Organize the expenses{" "}
+        </h1>
+        <h1
+          className={`fw-bolder mb-0 text-center text-lg-start text-${color}`}
+        >
+          {text}
+        </h1>
+        <h1 className="text-center text-lg-start">without stress</h1>
+        <Row className="my-2 justify-content-center justify-content-lg-start">
           {images_src.map((src, index) => (
             <Col key={index} xs="auto">
               <Image fluid src={src} style={{ width: "50px" }} />

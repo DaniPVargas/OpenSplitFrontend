@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Navbar, Container, Image } from "react-bootstrap";
 
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 
 import TelegramLoginButton from "react-telegram-login";
 
@@ -13,7 +13,7 @@ export const Header = ({ className, showTelegramButton }) => {
       <Navbar
         expand="md"
         variant="dark"
-        className={`${className} bg-dark px-3 border border-bottom-1`}
+        className={`${className} bg-dark px-3 shadow`}
       >
         <Container fluid className="d-flex justify-content-between">
           <Navbar.Brand

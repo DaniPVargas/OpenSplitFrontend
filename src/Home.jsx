@@ -3,7 +3,9 @@ import { Container, Row, Col, Spinner } from "react-bootstrap";
 
 import { Profile } from "./Profile";
 
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
+
+import "./scss/home.scss";
 
 export const Home = () => {
   const [data, setData] = useState([]);
@@ -11,7 +13,6 @@ export const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [id, setId] = useState(searchParams.get("id"));
   const [firstName, setFirstName] = useState(searchParams.get("first_name"));
   const [lastName, setLastName] = useState(searchParams.get("last_name"));
   const [username, setUsername] = useState(searchParams.get("username"));
@@ -42,13 +43,15 @@ export const Home = () => {
           },
         };
 
+        // Almacenamos en localstorage o authInfo
+        localStorage.setItem("auth", JSON.stringify(authInfo));
+
         const response = await fetch(
-          `https://opensplitbackend.onrender.com/users/@${username}/balance`,
+          `https://opensplitbackend.onrender.com/users/${username}/balance`,
           requestOptions
         );
         const jsonData = await response.json();
         setData(jsonData);
-        console.log(jsonData);
 
         setLoading(false);
       } catch (error) {
@@ -73,7 +76,7 @@ export const Home = () => {
       {loading && (
         <Container
           fluid
-          className="vh-75 d-flex align-items-center justify-content-center"
+          className="vh-75 d-flex align-items-center justify-content-center bg-light"
         >
           <Spinner
             animation="border"
@@ -85,7 +88,7 @@ export const Home = () => {
         </Container>
       )}
       {!loading && (
-        <Container fluid className="p-0">
+        <Container fluid className="px-3 py-5 bg-light min-hv-100">
           <Row xs={1} lg={2} className="mx-0 p-0">
             <Col className="p-0">
               <Row className="m-3 rounded-3 border border-bottom-1 ">
@@ -101,6 +104,7 @@ export const Home = () => {
                 filter == "" || group.group_name.startsWith(filter) ? (
                   <GroupButton
                     group_name={group.group_name}
+                    group_id={group.group_id}
                     balance={group.amount}
                     key={index}
                   />
@@ -124,15 +128,17 @@ export const Home = () => {
   );
 };
 
-function GroupButton({ group_name, balance }) {
+function GroupButton({ group_name, group_id, balance }) {
   return (
-    <Row className="m-3 py-4 px-3 bg-dark justify-content-between rounded-4 border border-bottom-1 text-white">
-      <Col xs="auto">
-        <h3>{group_name}</h3>
-      </Col>
-      <Col xs="auto" className={balance < 0 ? "text-danger" : "text-success"}>
-        <h3 className="mb-0">{Math.round(balance * 100) / 100} €</h3>
-      </Col>
-    </Row>
+    <Link to={`/home/${group_name}_${group_id}`} className="link">
+      <Row className="m-3 py-4 px-3 bg-dark justify-content-between rounded-4 border border-bottom-1 text-white">
+        <Col xs="auto">
+          <h3>{group_name}</h3>
+        </Col>
+        <Col xs="auto" className={balance < 0 ? "text-danger" : "text-success"}>
+          <h3 className="mb-0">{Math.round(balance * 100) / 100} €</h3>
+        </Col>
+      </Row>
+    </Link>
   );
 }
